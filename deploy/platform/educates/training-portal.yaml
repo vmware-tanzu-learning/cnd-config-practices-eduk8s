@@ -1,3 +1,4 @@
+# See https://docs.edukates.io/en/latest/runtime-environment/training-portal.html
 apiVersion: training.eduk8s.io/v1alpha1
 kind: TrainingPortal
 metadata:
@@ -7,8 +8,8 @@ spec:
     registration:
       type: anonymous
   workshops:
-  - name: cnd-config-practices-deploy
-    capacity: 1
+  - name: cnd-config-practices
+    capacity: 5
     reserved: 0
-    expires: 120m
+    expires: 180m
     orphaned: 5m

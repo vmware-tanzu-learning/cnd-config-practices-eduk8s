@@ -1,17 +1,17 @@
 apiVersion: training.eduk8s.io/v1alpha2
 kind: Workshop
 metadata:
-  name: cnd-config-practices-deploy
+  name: cnd-config-practices
 spec:
   title: Deploy a Cloud Native App on Kubernetes
   description: Deploy a Cloud Native App on Kubernetes
   vendor: eduk8s.io
   difficulty: beginner
-  duration: 120m
+  duration: 240m
   url: https://github.com/platform-acceleration-lab/cnd-config-practices-eduk8s
   content:
-    image: quay.io/eduk8s/jdk11-environment
-    files: $(ingress_protocol)://$(workshop_namespace)-docs.$(ingress_domain)/workshop.tar.gz
+    image: jdk11-environment:*
+    files: http://files.$(workshop_namespace).svc.cluster.local/workshop.tar.gz
   session:
     namespaces:
       budget: large
@@ -32,54 +32,57 @@ spec:
         enabled: true
     dashboards:
     - name: Lecture
-      url: https://vimeo.com/showcase/6259448/embed
+      url: https://vimeo.com/showcase/8261088/embed
   environment:
     objects:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: tarball-data
+        namespace: $(workshop_namespace)
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 500Mi
     - apiVersion: apps/v1
       kind: Deployment
       metadata:
-        name: $(workshop_namespace)-docs
+        name: files
         namespace: $(workshop_namespace)
       spec:
         replicas: 1
         selector:
           matchLabels:
-            deployment: $(workshop_namespace)-docs
+            deployment: files
         strategy:
           type: Recreate
         template:
           metadata:
             labels:
-              deployment: $(workshop_namespace)-docs
+              deployment: files
           spec:
             containers:
-            - name: docs
-              image: cnd-config-practices:latest
-              imagePullPolicy: IfNotPresent
+            - name: nginx
+              image: nginxinc/nginx-unprivileged:1.19-alpine
+              volumeMounts:
+              - mountPath: /usr/share/nginx/html
+                name: data
+            volumes:
+            - name: data
+              persistentVolumeClaim:
+                claimName: tarball-data
     - apiVersion: v1
       kind: Service
       metadata:
-        name: $(workshop_namespace)-docs
+        name: files
         namespace: $(workshop_namespace)
       spec:
         type: ClusterIP
         ports:
         - port: 80
           protocol: TCP
-          targetPort: 80
+          targetPort: 8080
         selector:
-          deployment: $(workshop_namespace)-docs
-    - apiVersion: networking.k8s.io/v1beta1
-      kind: Ingress
-      metadata:
-        name: $(workshop_namespace)-docs
-        namespace: $(workshop_namespace)
-      spec:
-        rules:
-        - host: $(workshop_namespace)-docs.$(ingress_domain)
-          http:
-            paths:
-            - backend:
-                serviceName: $(workshop_namespace)-docs
-                servicePort: 80
-              path: /
+          deployment: files
