@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.18.1/lib/index.min.js">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-texmath@0.6.5/css/texmath.css">
+<link rel="stylesheet" href="https://gitcdn.xyz/repo/goessner/mdmath/master/css/vscode-texmath.css">
+
+</head>
+<body class="markdown-body">
+<h2 id="configuring-a-spring-boot-app" data-line="0" class="code-line">Configuring a Spring Boot App</h2>
+<p data-line="2" class="code-line">Understand on how to configure cloud native applications using
+environment variables.</p>
+<h1 id="learning-outcomes" data-line="5" class="code-line">Learning Outcomes</h1>
+<p data-line="7" class="code-line">After completing the lab, you will be able to:</p>
+<ul>
+<li data-line="9" class="code-line">Summarize some of the ways to configure a Spring application</li>
+<li data-line="10" class="code-line">Use environment variables to configure an application running locally</li>
+</ul>
+<h1 id="12-factor-applications" data-line="12" class="code-line">12 Factor Applications</h1>
+<p data-line="14" class="code-line">Take a minute to read through the <a href="https://12factor.net" data-href="https://12factor.net">12 factors</a>
+guidelines on how to architect applications.
+In practice you will have to decide which ones to use and if it makes
+sense to adhere to all of them.</p>
+<p data-line="19" class="code-line">In the prior labs, you covered the first two factors by setting up your
+codebase in GitHub and using Gradle to explicitly declare your
+dependencies.</p>
+<p data-line="23" class="code-line">This lab will focus on the third factor: storing configuration in
+the environment.</p>
+<p data-line="26" class="code-line">There are many options for how to externalize configuration for a cloud
+native application.
+Our first choice is to use environment variables.</p>
+<h1 id="get-started" data-line="30" class="code-line">Get started</h1>
+<p data-line="32" class="code-line">Before starting the lab, pull in failing tests using Git:</p>
+<pre><code data-line="34" class="code-line language-bash"><div><span class="hljs-built_in">cd</span> ~/workspace/pal-tracker
+git cherry-pick configuration-start
+</div></code></pre>
+<p data-line="39" class="code-line">Your goal is to get the test suite passing by the end of the lab.</p>
+<p data-line="41" class="code-line">Since the cherry-pick added tests, you need to set up the build to use a
+testing framework.
+You will use Junit 5.</p>
+<p data-line="45" class="code-line">Add the following to your <code>build.gradle</code> file:</p>
+<ol>
+<li data-line="47" class="code-line">
+<p data-line="47" class="code-line">Add the following line to the <code>dependencies</code> closure in your
+<code>build.gradle</code> file to enable our test dependencies:</p>
+<pre><code data-line="50" class="code-line language-groovy"><div>testImplementation(<span class="hljs-string">&#x27;org.springframework.boot:spring-boot-starter-test&#x27;</span>) {
+    exclude <span class="hljs-attr">group:</span> <span class="hljs-string">&#x27;org.junit.vintage&#x27;</span>, <span class="hljs-attr">module:</span> <span class="hljs-string">&#x27;junit-vintage-engine&#x27;</span>
+}
+</div></code></pre>
+<p data-line="56" class="code-line"><em>Note</em>: Spring Boot 2.3.x pulls in both Junit 4 and 5.
+In the Spring Boot segment of the course you will use Junit 5.
+The <code>exclude group</code> clause will drop Junit 4 support.</p>
+</li>
+<li data-line="60" class="code-line">
+<p data-line="60" class="code-line">Add the following closure to the end of the <code>build.gradle</code>
+file:</p>
+<pre><code data-line="63" class="code-line language-groovy"><div>test {
+    useJUnitPlatform()
+}
+</div></code></pre>
+</li>
+</ol>
+<h1 id="environment-variables" data-line="69" class="code-line">Environment Variables</h1>
+<p data-line="71" class="code-line">You will use the environment variable mechanism to provide configuration
+to a process.
+In other words, it does not matter if your application is written in
+<a href="https://en.wikipedia.org/wiki/Java_(programming_language)" data-href="https://en.wikipedia.org/wiki/Java_(programming_language)">Java</a>,
+<a href="https://en.wikipedia.org/wiki/Ruby_(programming_language)" data-href="https://en.wikipedia.org/wiki/Ruby_(programming_language)">Ruby</a>,
+<a href="https://en.wikipedia.org/wiki/Go_(programming_language)" data-href="https://en.wikipedia.org/wiki/Go_(programming_language)">Golang</a>, or
+some other language, they all have the capability of reading environment
+variables.
+You will refactor your application to configure the <code>hello</code> message from
+the environment.</p>
+<h2 id="externalize-configuration" data-line="82" class="code-line">Externalize Configuration</h2>
+<p data-line="84" class="code-line">Spring Boot includes a mechanism to get configuration values.</p>
+<ol>
+<li data-line="86" class="code-line">
+<p data-line="86" class="code-line">Before you start updating your code, run the provided tests. (It will result in compile error initially.)</p>
+<p data-line="88" class="code-line">As you make code changes remember to run your tests.
+You can do this by running them from your IDE or running:</p>
+<pre><code data-line="91" class="code-line language-bash"><div>./gradlew <span class="hljs-built_in">test</span>
+</div></code></pre>
+</li>
+<li data-line="95" class="code-line">
+<p data-line="95" class="code-line">Extract the <code>hello</code> message to a field in the controller.</p>
+</li>
+<li data-line="96" class="code-line">
+<p data-line="96" class="code-line">Create a constructor that accepts a <code>message</code> parameter and assigns
+it to the field.</p>
+</li>
+<li data-line="98" class="code-line">
+<p data-line="98" class="code-line">Annotate that constructor parameter with <code>@Value</code>.</p>
+<p data-line="100" class="code-line"><code>@Value</code> takes a specific format to reference an environment
+variable, for example:</p>
+<pre><code data-line="103" class="code-line language-java"><div><span class="hljs-meta">@Value(&quot;${welcome.message}&quot;)</span>
+</div></code></pre>
+<p data-line="107" class="code-line">Take time to read about <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-annotation-config" data-href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-annotation-config">annotation-based configuration</a>
+if you are new to Spring or if you need a refresher.
+There is more <a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions-beandef" data-href="https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions-beandef">detailed documentation</a>
+on using Spring expressions in bean definitions and annotations, if
+you are interested.</p>
+</li>
+<li data-line="113" class="code-line">
+<p data-line="113" class="code-line">Make sure your <code>WelcomeControllerTest</code> passes before moving on.</p>
+</li>
+</ol>
+<h2 id="verify-it-works" data-line="115" class="code-line">Verify it works</h2>
+<p data-line="117" class="code-line">Run your app with the <code>bootRun</code> Gradle task.
+It will fail to start because Spring Boot is unable to find a value for
+the requested variable.</p>
+<p data-line="121" class="code-line">From now on the <code>WELCOME_MESSAGE</code> environment variable must be set to
+run your app.
+One way to do this is to add the environment variable assignment before
+the Gradle command.</p>
+<pre><code data-line="126" class="code-line language-bash"><div>WELCOME_MESSAGE=hello ./gradlew bootRun
+</div></code></pre>
+<h2 id="managing-local-properties" data-line="130" class="code-line">Managing local properties</h2>
+<p data-line="132" class="code-line">Running your application with environment variables in the command line
+every time is a pain.
+You can
+<a href="https://cloudnative.tips/configuring-a-java-application-for-local-development-60e2c9794ca7" data-href="https://cloudnative.tips/configuring-a-java-application-for-local-development-60e2c9794ca7">leverage gradle</a>
+to make this easier.</p>
+<p data-line="138" class="code-line">Extend the <code>bootRun</code> and <code>test</code> tasks to set the required
+environment variable by adding the following to your <code>build.gradle</code>
+file:</p>
+<pre><code data-line="142" class="code-line language-groovy"><div>bootRun.environment([
+    <span class="hljs-string">&quot;WELCOME_MESSAGE&quot;</span>: <span class="hljs-string">&quot;hello&quot;</span>,
+])
+
+test.environment([
+    <span class="hljs-string">&quot;WELCOME_MESSAGE&quot;</span>: <span class="hljs-string">&quot;Hello from test&quot;</span>,
+])
+</div></code></pre>
+<p data-line="152" class="code-line">This will instruct Gradle to set that environment variable for you when
+you run the <code>bootRun</code> task:</p>
+<pre><code data-line="155" class="code-line language-bash"><div>./gradlew bootRun
+</div></code></pre>
+<p data-line="159" class="code-line">This has the added benefit of documenting required environment variables
+and supporting multiple operating systems.</p>
+<p data-line="162" class="code-line">Make sure all your tests pass before moving on by running the Gradle
+<code>build</code> task.
+After the tests pass, use git to commit and push your changes.</p>
+<h1 id="assignment" data-line="166" class="code-line">Assignment</h1>
+<p data-line="168" class="code-line">Submit the assignment using the <code>cloudNativeDeveloperK8sConfiguration</code>
+gradle task from within the existing <code>assignment-submission</code> project
+directory.
+It requires you to provide the URL of your application running locally.</p>
+<p data-line="173" class="code-line">For example:</p>
+<pre><code data-line="175" class="code-line language-bash"><div><span class="hljs-built_in">cd</span> ~/workspace/assignment-submission
+./gradlew cloudNativeDeveloperK8sConfiguration -PserverUrl=http://localhost:8080
+</div></code></pre>
+<h1 id="learning-outcomes-1" data-line="180" class="code-line">Learning Outcomes</h1>
+<p data-line="182" class="code-line">Now that you have completed the lab, you should be able to:
+::learningOutcomes::</p>
+<h1 id="resources" data-line="185" class="code-line">Resources</h1>
+<ul>
+<li data-line="187" class="code-line"><a href="https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html" data-href="https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html">Spring application external configuration</a></li>
+</ul>
+
+</body></html>

@@ -3,10 +3,8 @@ modules:
   intro:
     name: Workshop Overview
     exit_sign: Start Workshop
-  exercises/01-building-a-web-app:
-    name: Building a blocking web app
-  exercises/02-containerizing-an-app:
-    name: Containerizing an App
-  exercises/03-deploy:
-    name: Deploying a Containerized App
+  exercises/01-configuring-an-app:
+    name: Configuring an app
+  exercises/02-using-configmap:
+    name: Using ConfigMap
     exit_sign: Finish Workshop
