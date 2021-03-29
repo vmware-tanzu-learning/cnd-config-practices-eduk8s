@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: pal-tracker
+  labels:
+    app: pal-tracker
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  backend:
+    serviceName: pal-tracker
+    servicePort: 8080

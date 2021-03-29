@@ -1,0 +1,14 @@
+apiVersion: training.eduk8s.io/v1alpha1
+kind: TrainingPortal
+metadata:
+  name: cnd-config-practices
+spec:
+  portal:
+    registration:
+      type: anonymous
+  workshops:
+  - name: cnd-config-practices-deploy
+    capacity: 1
+    reserved: 0
+    expires: 120m
+    orphaned: 5m

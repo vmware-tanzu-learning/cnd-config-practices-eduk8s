@@ -1,0 +1,85 @@
+apiVersion: training.eduk8s.io/v1alpha2
+kind: Workshop
+metadata:
+  name: cnd-config-practices-deploy
+spec:
+  title: Deploy a Cloud Native App on Kubernetes
+  description: Deploy a Cloud Native App on Kubernetes
+  vendor: eduk8s.io
+  difficulty: beginner
+  duration: 120m
+  url: https://github.com/platform-acceleration-lab/cnd-config-practices-eduk8s
+  content:
+    image: quay.io/eduk8s/jdk11-environment
+    files: $(ingress_protocol)://$(workshop_namespace)-docs.$(ingress_domain)/workshop.tar.gz
+  session:
+    namespaces:
+      budget: large
+    resources:
+      memory: 2Gi
+    applications:
+      terminal:
+        enabled: true
+        layout: split
+      console:
+        enabled: true
+        vendor: octant
+      editor:
+        enabled: true
+      registry:
+        enabled: true
+      docker:
+        enabled: true
+    dashboards:
+    - name: Lecture
+      url: https://vimeo.com/showcase/6259448/embed
+  environment:
+    objects:
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: $(workshop_namespace)-docs
+        namespace: $(workshop_namespace)
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            deployment: $(workshop_namespace)-docs
+        strategy:
+          type: Recreate
+        template:
+          metadata:
+            labels:
+              deployment: $(workshop_namespace)-docs
+          spec:
+            containers:
+            - name: docs
+              image: cnd-config-practices:latest
+              imagePullPolicy: IfNotPresent
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: $(workshop_namespace)-docs
+        namespace: $(workshop_namespace)
+      spec:
+        type: ClusterIP
+        ports:
+        - port: 80
+          protocol: TCP
+          targetPort: 80
+        selector:
+          deployment: $(workshop_namespace)-docs
+    - apiVersion: networking.k8s.io/v1beta1
+      kind: Ingress
+      metadata:
+        name: $(workshop_namespace)-docs
+        namespace: $(workshop_namespace)
+      spec:
+        rules:
+        - host: $(workshop_namespace)-docs.$(ingress_domain)
+          http:
+            paths:
+            - backend:
+                serviceName: $(workshop_namespace)-docs
+                servicePort: 80
+              path: /

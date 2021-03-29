@@ -1,0 +1,11 @@
+.dockerignore
+.eduk8signore
+.git
+.gitignore
+Dockerfile
+build.sh
+LICENSE
+README.md
+kustomization.yaml
+resources
+narrative
