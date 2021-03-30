@@ -3,8 +3,8 @@ kind: Workshop
 metadata:
   name: cnd-config-practices
 spec:
-  title: Deploy a Cloud Native App on Kubernetes
-  description: Deploy a Cloud Native App on Kubernetes
+  title: Configure a Cloud Native App on Kubernetes
+  description: Configure a Cloud Native App on Kubernetes
   vendor: eduk8s.io
   difficulty: beginner
   duration: 240m
