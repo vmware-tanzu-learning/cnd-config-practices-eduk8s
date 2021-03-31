@@ -24,7 +24,7 @@ container image.
     session: 1
     ```
 
-1.  Run your new image.
+1.  Wait until the image is successfully built and run your new image.
     An exception is expected to be thrown.
 
     ```terminal:execute
@@ -50,7 +50,7 @@ container image.
     ```
 
 1.  Navigate to `http://localhost:8080` and see that the
-    application responds with a `hello` message:
+    application responds with a `hello from dockerenv file` message:
 
     ```terminal:execute
     command: curl -v localhost:8080
