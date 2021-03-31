@@ -200,7 +200,8 @@ cd ~/workspace/assignment-submission
 
 # Wrap
 
-[Add some wordings here]
+In this exercise, you used ConfigMap of Kubernetes to set up
+properties of an application.
 
 # Resources
 

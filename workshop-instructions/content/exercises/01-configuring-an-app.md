@@ -174,7 +174,8 @@ to make this easier.
 
 # Wrap
 
-[Add some wordings here]
+In this exercise, you used environment variables to set up
+properties of an application. 
 
 # Resources
 
