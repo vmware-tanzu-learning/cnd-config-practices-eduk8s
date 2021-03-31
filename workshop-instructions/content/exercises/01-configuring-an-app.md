@@ -1,5 +1,6 @@
 
-Understand on how to configure cloud native applications using
+This exercise walk you through on how to configure cloud native
+applications using
 environment variables.
 
 # Learning Outcomes
@@ -29,13 +30,12 @@ Our first choice is to use environment variables.
 
 # Get started
 
-Before starting the lab, pull in failing tests using Git:
+1.  Set current directory to the `~/exercises/pal-tracker` now in both of
+    your terminal windows:
 
-```terminal:execute-all
-command: cd ~/exercises/pal-tracker
-```
-
-Your goal is to get the test suite passing by the end of the lab.
+    ```terminal:execute-all
+    command: cd ~/exercises/pal-tracker
+    ```
 
 1.  Open your editor:
 
@@ -43,7 +43,7 @@ Your goal is to get the test suite passing by the end of the lab.
     file: ~/exercises/pal-tracker/build.gradle
     ```
 
-2.  Review the `dependencies` closure in your
+1.  Review the `dependencies` closure in your
     `build.gradle` file to enable our test dependencies:
 
     ```groovy
@@ -56,7 +56,7 @@ Your goal is to get the test suite passing by the end of the lab.
     In the Spring Boot segment of the course you will use Junit 5.
     The `exclude group` clause will drop Junit 4 support.
 
-3.  Review the `test` closure to the end of the `build.gradle`
+1.  Review the `test` closure to the end of the `build.gradle`
     file:
 
     ```groovy
@@ -88,31 +88,20 @@ Spring Boot includes a mechanism to get configuration values.
     file: ~/exercises/pal-tracker/src/main/java/io/pivotal/pal/tracker/WelcomeController.java
     ```
 
-    Take time to read about [annotation-based configuration](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-annotation-config)
+    Review how `@Value` annotation is used to inject `welcome.message`
+    property value through a constructor argument.
+
+    Take time to read about
+    [annotation-based configuration](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-annotation-config)
     if you are new to Spring or if you need a refresher.
     There is more [detailed documentation](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions-beandef)
     on using Spring expressions in bean definitions and annotations, if
     you are interested.
 
-1.  Before you start updating your code, run the provided tests. (It will result in compile error initially.)
-
-    ```terminal:execute
-    command: ./gradlew test
-    session: 1
-    ```
-
 ## Verify it works
 
-1.  Run your app with the `bootRun` Gradle task.
-    It will fail to start because Spring Boot is unable to find a value for the requested variable.
-
-    ```terminal:execute
-    command: ./gradlew bootRun
-    session: 1
-    ```
-
-1.  Run your app with `WELCOME_MESSAGE` environment variable.
-    This time, the app should succeed.
+1.  Run your app with `WELCOME_MESSAGE` environment variable, which
+    is set at the commandline.
 
     ```terminal:execute
     command: WELCOME_MESSAGE=hello ./gradlew bootRun
@@ -127,45 +116,61 @@ Spring Boot includes a mechanism to get configuration values.
     session: 2
     ```
 
+1.  Terminate your web app:
 
-## Managing local properties
+    ```terminal:execute
+    command: <ctrl+c>
+    session: 1
+    ```
+
+## Manage local properties
 
 Running your application with environment variables in the command line
 every time is a pain.
 You can
-[leverage gradle](https://cloudnative.tips/configuring-a-java-application-for-local-development-60e2c9794ca7)
+[leverage Gradle](https://cloudnative.tips/configuring-a-java-application-for-local-development-60e2c9794ca7)
 to make this easier.
 
-Extend the `bootRun` and `test` tasks to set the required
-environment variable by adding the following to your `build.gradle`
-file:
+1.  Review the `bootRun.environment` and `test.environment` methods
+    in the `build.gradle` file:
 
-    ```editor:append-lines-to-file
+    ```editor:open-file
     file: ~/exercises/pal-tracker/build.gradle
-    text: |
-    bootRun.environment([
-        "WELCOME_MESSAGE": "hello",
-    ])
-
-    test.environment([
-        "WELCOME_MESSAGE": "Hello from test",
-    ])
     ```
 
-This will instruct Gradle to set that environment variable for you when
-you run the `bootRun` task:
+    This will instruct Gradle to set that environment variables
+    for you when you run the `bootRun` task:
 
     ```terminal:execute
     command: ./gradlew bootRun
     session: 1
     ```
 
-This has the added benefit of documenting required environment variables
-and supporting multiple operating systems.
+    This has the added benefit of documenting required environment
+    variables and supporting multiple operating systems.
 
-Make sure all your tests pass before moving on by running the Gradle
-`build` task.
-After the tests pass, use git to commit and push your changes.
+1.  Navigate to `http://localhost:8080` and see that the
+    application responds with a `hello` message:
+
+    ```terminal:execute
+    command: curl -v localhost:8080
+    session: 2
+    ```
+
+1.  Terminate your web app:
+
+    ```terminal:execute
+    command: <ctrl+c>
+    session: 1
+    ```
+
+1.  Make sure all your tests pass before moving on by running
+    the Gradle `build` task.
+
+    ```terminal:execute
+    command: ./gradlew clean build
+    session: 1
+    ```
 
 # Wrap
 

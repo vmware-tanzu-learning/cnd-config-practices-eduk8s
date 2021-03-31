@@ -1,6 +1,6 @@
-# Using ConfigMaps to set environment variables
 
-To gain an understanding of how to use ConfigMaps in Kubernetes to set
+This exercise walks you through on
+how to use ConfigMaps in Kubernetes to set
 environment variables for your application.
 
 # Learning Outcomes
@@ -10,73 +10,97 @@ After completing the lab, you will be able to:
 - Explain how to configure an application running on Kubernetes using a ConfigMap
 - Describe how to view Pod logs
 
-## Running in a container
+## Run in a container
 
-Now that you have made changes to your code, you need to build a new
+Now you are going to build a new
 container image.
 
-1.  Use the `bootBuildImage` task to build a new image. This time
+1.  Use the `bootBuildImage` task to build a new image.
+    This time
     specify the repository and the version while building the image.
 
-    ```bash
-    ./gradlew bootBuildImage --imageName={{ registry_host }}/pal-tracker:v1
+    ```terminal:execute
+    command: ./gradlew bootBuildImage --imageName={{ registry_host }}/pal-tracker:v1
+    session: 1
     ```
 
-1.  Try running your new image.
+1.  Run your new image.
+    An exception is expected to be thrown.
 
-    ```bash
-    docker run --rm -p 8080:8080 ${YOUR_DOCKER_HUB_USERNAME}/pal-tracker:v1
+    ```terminal:execute
+    command: docker run --rm -p 8080:8080 {{ registry_host }}/pal-tracker:v1
+    session: 1
     ```
 
     Inspect the exception that is being thrown.
 
 1.  To handle multiple environment variables more easily across Docker
-    container instances, create a `dockerenv` file in the root of your
+    container instances, use a `dockerenv` file in the root of your
     application with the key/value pair contents:
 
-    ```bash
-    WELCOME_MESSAGE=hello from dockerenv file
+    ```editor:open-file
+    file: ~/exercises/pal-tracker/dockerenv
     ```
 
 1.  Tell `docker run` to read the environment variables from the file:
 
-    ```bash
-    docker run --env-file=dockerenv --rm -p 8080:8080 ${YOUR_DOCKER_HUB_USERNAME}/pal-tracker:v1
+    ```terminal:execute
+    command: docker run --env-file=dockerenv --rm -p 8080:8080 {{ registry_host }}/pal-tracker:v1
+    session: 1
+    ```
+
+1.  Navigate to `http://localhost:8080` and see that the
+    application responds with a `hello` message:
+
+    ```terminal:execute
+    command: curl -v localhost:8080
+    session: 2
+    ```
+
+1.  Terminate your web app:
+
+    ```terminal:execute
+    command: <ctrl+c>
+    session: 1
     ```
 
 1.  Once you are confident your application runs from within the
-    container, publish the new version to Docker Hub.
+    container, publish the new version to container registry.
 
-    ```bash
-    docker push ${YOUR_DOCKER_HUB_USERNAME}/pal-tracker:v1
+    ```terminal:execute
+    command: docker push {{ registry_host }}/pal-tracker:v1
+    session: 1
     ```
-
-1.  Delete the `dockerenv` file, it is no longer needed.
 
 ## Deploy the new image
 
-1.  Update your Deployment yaml file to use the new version of your
-    image:
+1.  Make sure you are in your `~/exercises/k8s` directory now in
+    both of your terminal windows,
+    and clear both:
 
-    ```diff
-          containers:
-            - name: pal-tracker-container
-    -         image: YOUR_DOCKER_HUB_USERNAME/pal-tracker:v0
-    +         image: YOUR_DOCKER_HUB_USERNAME/pal-tracker:v1
+    ```terminal:execute-all
+    command: cd ~/exercises/k8s
     ```
 
-1.  Before applying the change to the Deployment run
+    ```terminal:clear-all
+    ```
+
+1.  Before applying the change to the Deployment, run
     `kubectl get pods --watch`.
     This will show you a running status of the Pods as changes are
     applied.
-    Run the following commands in a new terminal window so you can
-    monitor the Pod changes in real time.
+
+    ```terminal:execute
+    command: kubectl get pods --watch
+    session: 1
+    ```
 
 1.  To apply your Deployment changes, run the same command you ran when
     you first created the Deployment:
 
-    ```bash
-    kubectl apply -f k8s/deployment.yaml
+    ```terminal:execute
+    command: kubectl apply -f deployment.yaml
+    session: 2
     ```
 
     View the output of the `kubectl get pods --watch`.
@@ -87,8 +111,9 @@ container image.
 
 1.  View the logs of the Pod by running:
 
-    ```bash
-    kubectl logs -lapp=pal-tracker --tail=100
+    ```terminal:execute
+    command: kubectl logs -lapp=pal-tracker --tail=100
+    session: 2
     ```
 
     This will show the last 100 lines of system out and system error
@@ -97,6 +122,13 @@ container image.
     Pods this same command will fetch logs from all of them.
 
 1.  Inspect the exception that is being thrown.
+
+1.  Terminate the watch:
+
+    ```terminal:execute
+    command: <ctrl+c>
+    session: 1
+    ```
 
 ## Configure the app using a ConfigMap
 
@@ -108,34 +140,11 @@ Then you will update your Deployment to fetch the `welcome.message`
 value out of the ConfigMap, and set it as an environment variable in
 the container running your app.
 
-1.  Create a `configmap.yaml` file with the following contents:
+1.  Review `configmap.yaml` file:
 
-    ```terminal:execute
-    command: git show configmap-solution:configmap.yaml
-    session: 2
-    ```
-
-1.  Apply the `configmap.yaml`:
-
-    ```bash
-    kubectl apply -f k8s/configmap.yaml
-    ```
-
-    You can verify the ConfigMap created successfully by running
-    `kubectl get configmaps` and
-    `kubectl describe configmap pal-tracker`.
-
-1.  In your Deployment, add an `env` section to your container
-
-    ```diff
-            - name: pal-tracker-container
-              image: {{ registry_host }}/pal-tracker:v1
-    +         env:
-    +           - name: WELCOME_MESSAGE
-    +             valueFrom:
-    +               configMapKeyRef:
-    +                 name: pal-tracker
-    +                 key: welcome.message
+    ```editor:open-file
+    file: ~/exercises/k8s/configmap.yaml
+    session: 1
     ```
 
     The `env` section above sets an environment variable named
@@ -145,18 +154,41 @@ the container running your app.
     Within the ConfigMap it looks for a value using the key
     `welcome.message`.
 
-1.  Apply the Deployment manifest.
+1.  Apply the `configmap.yaml`:
 
-1.  Your Pod will now start successfully.
-    Try navigating to the development domain using a web browser.
-    You will now see the welcome message you set in the ConfigMap.
+    ```terminal:execute
+    command: kubectl apply -f configmap.yaml
+    session: 1
+    ```
 
-1.  Commit and push your changes.
+1.  Verify the ConfigMap is created successfully:
 
-# Assignment
+    ```terminal:execute
+    command: kubectl get configmaps
+    session: 1
+    ```
+
+1.  Review `env` section of your container
+
+    ```terminal:execute
+    command: kubectl describe configmap pal-tracker
+    session: 1
+    ```
+
+    Note that `welcome.message` is set to `hello from kubernetes`.
+
+1.  Navigate to `http://localhost:8080` and see that the
+    application responds with a `hello` message:
+
+    ```terminal:execute
+    command: curl -v localhost:8080
+    session: 2
+    ```
+
+# Run a smoke test
 
 Submit the assignment using the `cloudNativeDeveloperK8sConfigMap`
-gradle task.
+Gradle task.
 It requires you to provide the URL of your application running on
 Kubernetes and the name of your ConfigMap.
 For example:
@@ -166,10 +198,9 @@ cd ~/workspace/assignment-submission
 ./gradlew cloudNativeDeveloperK8sConfigMap -PserverUrl=http://${YOUR_APPLICATION_URL} -PconfigMapName=pal-tracker
 ```
 
-# Learning Outcomes
+# Wrap
 
-Now that you have completed the lab, you should be able to:
-::learningOutcomes::
+[Add some wordings here]
 
 # Resources
 
