@@ -8,7 +8,7 @@ environment variables.
 After completing the lab, you will be able to:
 
 - Summarize some of the ways to configure a Spring application
-- Use environment variables to configure an application running locally
+- Use environment variables to externally configure an application running locally
 
 # 12 Factor Applications
 
