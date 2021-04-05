@@ -20,15 +20,15 @@ container image.
     specify the repository and the version while building the image.
 
     ```terminal:execute
-    command: ./gradlew bootBuildImage --imageName={{ registry_host }}/pal-tracker:v1
+    command: ./gradlew bootBuildImage --imageName=${REGISTRY_HOST}/pal-tracker:v1
     session: 1
     ```
 
 1.  Wait until the image is successfully built and run your new image.
-    An exception is expected to be thrown.
+    **An exception is expected to be thrown.**
 
     ```terminal:execute
-    command: docker run --rm -p 8080:8080 {{ registry_host }}/pal-tracker:v1
+    command: docker run --rm -p 8080:8080 ${REGISTRY_HOST}/pal-tracker:v1
     session: 1
     ```
 
@@ -45,7 +45,7 @@ container image.
 1.  Tell `docker run` to read the environment variables from the file:
 
     ```terminal:execute
-    command: docker run --env-file=dockerenv --rm -p 8080:8080 {{ registry_host }}/pal-tracker:v1
+    command: docker run --env-file=dockerenv --rm -p 8080:8080 ${REGISTRY_HOST}/pal-tracker:v1
     session: 1
     ```
 
@@ -68,7 +68,7 @@ container image.
     container, publish the new version to container registry.
 
     ```terminal:execute
-    command: docker push {{ registry_host }}/pal-tracker:v1
+    command: docker push ${REGISTRY_HOST}/pal-tracker:v1
     session: 1
     ```
 
@@ -187,16 +187,14 @@ the container running your app.
 
 # Run a smoke test
 
-Submit the assignment using the `cloudNativeDeveloperK8sConfigMap`
-Gradle task.
-It requires you to provide the URL of your application running on
-Kubernetes and the name of your ConfigMap.
-For example:
+Run a smoke test against your deployment via the following command:
 
-```bash
-cd ~/workspace/assignment-submission
-./gradlew cloudNativeDeveloperK8sConfigMap -PserverUrl=http://${YOUR_APPLICATION_URL} -PconfigMapName=pal-tracker
+```terminal:execute
+command: curl -i http://pal-tracker.${SESSION_NAMESPACE}.${INGRESS_DOMAIN}
+session: 2
 ```
+
+You should see 'hello from kubernetes' message in the output.
 
 # Wrap
 

@@ -18,11 +18,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
-bootRun.environment([
-        "WELCOME_MESSAGE": "hello",
-])
-
-test.environment([
-        "WELCOME_MESSAGE": "Hello from test",
-])

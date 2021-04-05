@@ -37,12 +37,6 @@ Our first choice is to use environment variables.
     command: cd ~/exercises/pal-tracker
     ```
 
-1.  Open your editor:
-
-    ```editor:open-file
-    file: ~/exercises/pal-tracker/build.gradle
-    ```
-
 # Environment Variables
 
 You will use the environment variable mechanism to provide configuration
@@ -79,7 +73,9 @@ Spring Boot includes a mechanism to get configuration values.
 ## Verify it works
 
 1.  Run your app with `WELCOME_MESSAGE` environment variable, which
-    is set at the commandline.
+    is set at the commandline. 
+    Wait until the application is successfully started. 
+    (You should see `Tomcat started on port(s): 8080 ...`)
 
     ```terminal:execute
     command: WELCOME_MESSAGE=hello ./gradlew bootRun
@@ -109,23 +105,38 @@ You can
 [leverage Gradle](https://cloudnative.tips/configuring-a-java-application-for-local-development-60e2c9794ca7)
 to make this easier.
 
-1.  Review the `bootRun.environment` and `test.environment` methods
-    in the `build.gradle` file:
+1.  Add the `bootRun.environment` and `test.environment` methods
+    to the `build.gradle` file:
 
-    ```editor:open-file
+    ```editor:append-lines-to-file
     file: ~/exercises/pal-tracker/build.gradle
-    ```
+    text: |
+
+        bootRun.environment([
+                "WELCOME_MESSAGE": "hello",
+        ])
+
+        test.environment([
+                "WELCOME_MESSAGE": "Hello from test",
+        ])
+    ``` 
+
+    If you see a pop-up window in the `Editor` 
+    asking if you want to synchronize
+    the Java classpath/configuration, click `Always`.
 
     This will instruct Gradle to set that environment variables
     for you when you run the `bootRun` task:
+
+    This has the added benefit of documenting required environment
+    variables and supporting multiple operating systems.
+
+1.  Run your app.
 
     ```terminal:execute
     command: ./gradlew bootRun
     session: 1
     ```
-
-    This has the added benefit of documenting required environment
-    variables and supporting multiple operating systems.
 
 1.  Navigate to `http://localhost:8080` and see that the
     application responds with a `hello` message:
