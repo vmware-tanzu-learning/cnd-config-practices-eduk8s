@@ -43,28 +43,6 @@ Our first choice is to use environment variables.
     file: ~/exercises/pal-tracker/build.gradle
     ```
 
-1.  Review the `dependencies` closure in your
-    `build.gradle` file to enable our test dependencies:
-
-    ```groovy
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    ```
-
-    *Note*: Spring Boot 2.3.x pulls in both Junit 4 and 5.
-    In the Spring Boot segment of the course you will use Junit 5.
-    The `exclude group` clause will drop Junit 4 support.
-
-1.  Review the `test` closure to the end of the `build.gradle`
-    file:
-
-    ```groovy
-    test {
-        useJUnitPlatform()
-    }
-    ```
-
 # Environment Variables
 
 You will use the environment variable mechanism to provide configuration
