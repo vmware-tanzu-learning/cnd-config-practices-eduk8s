@@ -7,11 +7,10 @@ in configuring an application.
 
 ## Learning outcomes
 
-After completing the workshop,
-you will be able to:
+After completing the workshop, you will be able to:
 
--   Configuration requirements of Cloud Native applications
--   Configuration options available to Cloud Native applications
+-   Explain configuration requirements of Cloud Native applications
+-   Explain configuration options available to Cloud Native applications
 
 ## Introduction
 
