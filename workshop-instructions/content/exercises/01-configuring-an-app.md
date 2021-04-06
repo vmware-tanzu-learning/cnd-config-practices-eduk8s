@@ -56,8 +56,9 @@ Spring Boot includes a mechanism to get configuration values.
 
 1.  Review the `io.pivotal.pal.tracker.WelcomeController` class.
 
-    ```editor:open-file
+    ```editor:select-matching-text
     file: ~/exercises/pal-tracker/src/main/java/io/pivotal/pal/tracker/WelcomeController.java
+    text: "@Value"
     ```
 
     Review how `@Value` annotation is used to inject `welcome.message`
