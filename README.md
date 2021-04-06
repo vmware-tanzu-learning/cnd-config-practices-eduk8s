@@ -241,6 +241,22 @@ The [exercises directory](./exercises) contains the following:
 
 ## Known issues
 
+### Kubernetes cannot pull from container registry (kind)
+
+This problem is mentioned in [self-signed cert in local kind environment prevents per-session registry from working #18](https://github.com/platform-acceleration-lab/cnd-deploy-practices-eduk8s/issues/18)
+
+Work-around for now is to side-load the image manually following
+the steps mentioned below.
+
+```
+cd workshop-files/exercises/pal-tracker
+./gradlew bootBuildImage --imageName=pal-tracker:v1
+(Get and export the value of REGISTRY_HOST from the running workshop)
+export REGISTRY_HOST=cnd-config-practices-w01-s001-registry.192.168.1.7.nip.io
+docker tag pal-tracker:v1 ${REGISTRY_HOST}/pal-tracker:v1
+kind load docker-image --name cnd-config-practices ${REGISTRY_HOST}/pal-tracker:v1
+```
+
 ### Kubernetes cannot pull from container registry (minikube)
 
 Make sure you have configured the `--insecure-registry` flag to the

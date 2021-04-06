@@ -10,6 +10,7 @@ spec:
       app: pal-tracker
       name: pal-tracker-pod
   template:
+    # Pod definition starts here
     metadata:
       labels:
         app: pal-tracker
@@ -17,4 +18,10 @@ spec:
     spec:
       containers:
         - name: pal-tracker-container
-          image: REGISTRY_HOST/pal-tracker:v0
+          image: REGISTRY_HOST/pal-tracker:v1
+          env:
+            - name: WELCOME_MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: pal-tracker
+                  key: welcome.message

@@ -1,13 +1,13 @@
 ---
-title: "Building and deploying a Cloud Native Application"
+title: "Configuring a Cloud Native Application"
 featured: 2
 weight: 2
 description: >
-    You will build and deploy a blocking web application on a modern
+    You will configure a web application on a modern
     container orchestration platform,
     and learn cloud native principles along the way.
 summary:
-    You will build and deploy a blocking web application on a modern
+    You will configure a web application on a modern
     container orchestration platform,
     and learn cloud native principles along the way.
 topics:

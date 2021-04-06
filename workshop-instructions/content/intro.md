@@ -1,14 +1,16 @@
 # Configuring a Cloud Native app
 
-[Add intro to this workshop]
+Cloud native applications have an additional set of requirements
+in configuring an application.
 
+[Add more wording here]
 
 ## Learning outcomes
 
-After completing the workshop,
-you will be able to:
+After completing the workshop, you will be able to:
 
--   Configuring an application
+-   Explain configuration requirements of Cloud Native applications
+-   Explain configuration options available to Cloud Native applications
 
 ## Introduction
 
