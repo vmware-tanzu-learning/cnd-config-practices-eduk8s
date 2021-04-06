@@ -19,9 +19,3 @@ spec:
       containers:
         - name: pal-tracker-container
           image: REGISTRY_HOST/pal-tracker:v1
-          env:
-            - name: WELCOME_MESSAGE
-              valueFrom:
-                configMapKeyRef:
-                  name: pal-tracker
-                  key: welcome.message
