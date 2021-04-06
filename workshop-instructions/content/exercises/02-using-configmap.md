@@ -32,7 +32,7 @@ container image.
     session: 1
     ```
 
-    Inspect the exception that is being thrown.
+    Note that the exception occurred due to `Could not resolve placeholder 'welcome.message' in value "${welcome.message}`.
 
 1.  To handle multiple environment variables more easily across Docker
     container instances, use a `dockerenv` file in the root of your
@@ -85,6 +85,18 @@ container image.
     ```terminal:clear-all
     ```
 
+1.  Apply Service and Ingress resources.
+
+    ```terminal:execute
+    command: kubectl apply -f service.yaml
+    session: 2
+    ```
+
+    ```terminal:execute
+    command: kubectl apply -f ingress.yaml
+    session: 2
+    ```
+
 1.  Before applying the change to the Deployment, run
     `kubectl get pods --watch`.
     This will show you a running status of the Pods as changes are
@@ -96,7 +108,8 @@ container image.
     ```
 
 1.  To apply your Deployment changes, run the same command you ran when
-    you first created the Deployment:
+    you first created the Deployment. 
+    **Failure of the deployment is expected**
 
     ```terminal:execute
     command: kubectl apply -f deployment.yaml
@@ -104,10 +117,8 @@ container image.
     ```
 
     View the output of the `kubectl get pods --watch`.
-    You will see a new Pod being created, and the old Pod getting
-    terminated.
     The new Pod will start crashing and you will see it cycle its
-    STATUS between "Running", "Error", and "CrashLoopBackOff".
+    STATUS among "Pending", ContainerCreating", and "CreateContainerConfigError".
 
 1.  View the logs of the Pod by running:
 
@@ -121,15 +132,6 @@ container image.
     Right now you only have a single Pod, but when you scale to multiple
     Pods this same command will fetch logs from all of them.
 
-1.  Inspect the exception that is being thrown.
-
-1.  Terminate the watch:
-
-    ```terminal:execute
-    command: <ctrl+c>
-    session: 1
-    ```
-
 ## Configure the app using a ConfigMap
 
 Your application is failing to start because `welcome.message` is not
@@ -140,50 +142,53 @@ Then you will update your Deployment to fetch the `welcome.message`
 value out of the ConfigMap, and set it as an environment variable in
 the container running your app.
 
-1.  Review `configmap.yaml` file:
+1.  Create `configmap.yaml` file.
 
-    ```editor:open-file
+    ```editor:append-lines-to-file
     file: ~/exercises/k8s/configmap.yaml
-    session: 1
+    text: |
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+            name: pal-tracker
+            labels:
+                app: pal-tracker
+        data:
+            WELCOME_MESSAGE: "hello from kubernetes"
     ```
 
-    The `env` section above sets an environment variable named
+    The `data` section above sets an environment variable named
     `WELCOME_MESSAGE`.
     The value for `WELCOME_MESSAGE` is taken from a ConfigMap object
     named `pal-tracker`.
     Within the ConfigMap it looks for a value using the key
     `welcome.message`.
 
-1.  Apply the `configmap.yaml`:
+2.  Apply the `configmap.yaml`.
 
     ```terminal:execute
     command: kubectl apply -f configmap.yaml
-    session: 1
+    session: 2
     ```
 
-1.  Verify the ConfigMap is created successfully:
+3.  Verify the ConfigMap called `pal-tracker` is created successfully.
 
     ```terminal:execute
     command: kubectl get configmaps
-    session: 1
+    session: 2
     ```
 
-1.  Review `env` section of your container
+4.  Review `Data` section of the ConfigMap.
 
     ```terminal:execute
     command: kubectl describe configmap pal-tracker
-    session: 1
-    ```
-
-    Note that `welcome.message` is set to `hello from kubernetes`.
-
-1.  Navigate to `http://localhost:8080` and see that the
-    application responds with a `hello` message:
-
-    ```terminal:execute
-    command: curl -v localhost:8080
     session: 2
     ```
+
+    Note that `WELCOME_MESSAGE` is set to `hello from kubernetes`.
+
+5.  View the output of the `kubectl get pods --watch`.
+    You will see the previously failing Pod is now in `Running` status.
 
 # Run a smoke test
 
