@@ -5,8 +5,14 @@ metadata:
   labels:
     app: pal-tracker
 spec:
-  defaultBackend:
-    service:
-      name: pal-tracker
-      port:
-        number: 8080
+  rules:
+  - host: pal-tracker.INGRESS_HOST
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: pal-tracker
+            port:
+              number: 8080

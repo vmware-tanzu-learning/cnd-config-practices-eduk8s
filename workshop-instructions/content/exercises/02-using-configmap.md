@@ -16,15 +16,15 @@ Now you are going to build a new
 container image.
 
 1.  Use the `bootBuildImage` task to build a new image.
-    This time
-    specify the repository and the version while building the image.
+    Specify the repository and the version while building the image.
 
     ```terminal:execute
     command: ./gradlew bootBuildImage --imageName=${REGISTRY_HOST}/pal-tracker:v1
     session: 1
     ```
 
-1.  Wait until the image is successfully built and run your new image.
+1.  Wait until the image is successfully built and then
+    run your new image.
     **An exception is expected to be thrown.**
 
     ```terminal:execute
@@ -35,11 +35,13 @@ container image.
     Note that the exception occurred due to `Could not resolve placeholder 'welcome.message' in value "${welcome.message}`.
 
 1.  To handle multiple environment variables more easily across Docker
-    container instances, use a `dockerenv` file in the root of your
+    container instances, create a `dockerenv` file in the root of your
     application with the key/value pair contents:
 
-    ```editor:open-file
+    ```editor:append-lines-to-file
     file: ~/exercises/pal-tracker/dockerenv
+    text: |
+        WELCOME_MESSAGE=hello from dockerenv file
     ```
 
 1.  Tell `docker run` to read the environment variables from the file:
@@ -118,7 +120,7 @@ container image.
 
     View the output of the `kubectl get pods --watch`.
     The new Pod will start crashing and you will see it cycle its
-    STATUS among "Pending", ContainerCreating", and "CreateContainerConfigError".
+    STATUS among "Running", "Error", and "CrashLoopBackOff".
 
 1.  View the logs of the Pod by running:
 
@@ -131,6 +133,13 @@ container image.
     from Pods with the label `app: pal-tracker`.
     Right now you only have a single Pod, but when you scale to multiple
     Pods this same command will fetch logs from all of them.
+
+    Notice that the following exception is thrown by the application.
+    (You might have to click the above action a couple of times.)
+
+    ```
+    Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'welcome.message' in value "${welcome.message}"
+    ```
 
 ## Configure the app using a ConfigMap
 
@@ -154,7 +163,7 @@ the container running your app.
             labels:
                 app: pal-tracker
         data:
-            WELCOME_MESSAGE: "hello from kubernetes"
+            welcome.message: "hello from kubernetes"
     ```
 
     The `data` section above sets an environment variable named
@@ -164,30 +173,51 @@ the container running your app.
     Within the ConfigMap it looks for a value using the key
     `welcome.message`.
 
-2.  Apply the `configmap.yaml`.
+1.  Apply the `configmap.yaml`.
 
     ```terminal:execute
     command: kubectl apply -f configmap.yaml
     session: 2
     ```
 
-3.  Verify the ConfigMap called `pal-tracker` is created successfully.
+1.  Verify the ConfigMap called `pal-tracker` is created successfully.
 
     ```terminal:execute
     command: kubectl get configmaps
     session: 2
     ```
 
-4.  Review `Data` section of the ConfigMap.
+1.  Review `Data` section of the ConfigMap.
 
     ```terminal:execute
     command: kubectl describe configmap pal-tracker
     session: 2
     ```
 
-    Note that `WELCOME_MESSAGE` is set to `hello from kubernetes`.
+    Note that `welcome.message` is set to `hello from kubernetes`.
 
-5.  View the output of the `kubectl get pods --watch`.
+1.  Edit `deployment.yaml` file.
+
+    ```editor:insert-value-into-yaml
+    file: ~/exercises/k8s/deployment.yaml
+    path: spec.template.spec.containers[0]
+    value: 
+        env:
+        - name: WELCOME_MESSAGE
+          valueFrom:
+            configMapKeyRef:
+              name: pal-tracker
+              key: welcome.message
+    ```    
+
+1.  Apply the modified `deployment.yaml`.
+
+    ```terminal:execute
+    command: kubectl apply -f deployment.yaml
+    session: 2
+    ```
+
+1.  View the output of the `kubectl get pods --watch`.
     You will see the previously failing Pod is now in `Running` status.
 
 # Run a smoke test
