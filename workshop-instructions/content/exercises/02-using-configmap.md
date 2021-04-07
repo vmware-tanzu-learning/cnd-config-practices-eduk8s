@@ -16,15 +16,15 @@ Now you are going to build a new
 container image.
 
 1.  Use the `bootBuildImage` task to build a new image.
-    This time
-    specify the repository and the version while building the image.
+    Specify the repository and the version while building the image.
 
     ```terminal:execute
     command: ./gradlew bootBuildImage --imageName=${REGISTRY_HOST}/pal-tracker:v1
     session: 1
     ```
 
-1.  Wait until the image is successfully built and run your new image.
+1.  Wait until the image is successfully built and then
+    run your new image.
     **An exception is expected to be thrown.**
 
     ```terminal:execute
