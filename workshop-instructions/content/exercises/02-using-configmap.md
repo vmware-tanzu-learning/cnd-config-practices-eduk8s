@@ -237,7 +237,25 @@ You should see 'hello from kubernetes' message in the output.
 In this exercise, you used ConfigMap of Kubernetes to set up
 properties of an application.
 
+Now there are some issues to consider with the way configuration
+properties are provided to the applications in this exercise:
+
+-   The configuration data among application instances 
+    become more and more different as time goes on: this
+    is called "Configuration Drift".
+
+-   You don't want to set configuration data by hand.
+    If you need to change a configuration, you will want
+    to make a change in source code-controlled manner,
+    which will be picked by automated deployment tool.
+
+-   Some configuration data such as password need to be
+    protected.  This might require the usage of 
+    security-enabled configuration servers such as
+    Vault from HashiCorp or CredHub from Cloud Foundry.
+
 # Resources
 
 - [ConfigMap Overview](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/)
 - [ConfigMap API Documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#configmap-v1-core)
+
