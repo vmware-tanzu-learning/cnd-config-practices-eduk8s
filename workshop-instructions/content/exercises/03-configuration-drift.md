@@ -93,6 +93,11 @@ After completing the lab, you will be able to:
     session: 2
     ```
 
+    This indicates that the newly created pods picked
+    up the new `welcome.message` configuration value while
+    the existing pod still uses the old configuration value.
+    This is an example of *Configuration Drift*.
+
 ## Restart all instances
     
 1.  Rollout the application
@@ -110,8 +115,6 @@ After completing the lab, you will be able to:
     command: curl -i http://pal-tracker.${SESSION_NAMESPACE}.${INGRESS_DOMAIN}
     session: 2
     ```
-
-
 
 # Wrap
 
