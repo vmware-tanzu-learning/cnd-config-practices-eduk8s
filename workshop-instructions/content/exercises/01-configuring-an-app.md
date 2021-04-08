@@ -7,8 +7,9 @@ environment variables.
 
 After completing the lab, you will be able to:
 
-- Summarize some of the ways to configure an application
-- Use environment variables to externally configure an application running locally
+-   Summarize some of the ways to configure an application
+-   Use environment variables to externally configure an application
+    running locally
 
 # Get started
 
@@ -49,8 +50,8 @@ Spring Boot includes a mechanism to get configuration values.
 ## Verify it works
 
 1.  Run your app with `WELCOME_MESSAGE` environment variable, which
-    is set at the commandline. 
-    Wait until the application is successfully started. 
+    is set at the commandline.
+    Wait until the application is successfully started.
     (You should see `Tomcat started on port(s): 8080 ...`)
 
     ```terminal:execute
@@ -76,10 +77,11 @@ Spring Boot includes a mechanism to get configuration values.
 ## Manage local properties
 
 Running your application with environment variables at the command line
-every time is a pain.
+every time is tedious.
+
 You can
 [leverage Gradle](https://cloudnative.tips/configuring-a-java-application-for-local-development-60e2c9794ca7)
-to make this easier.
+to make this easier when running locally.
 
 1.  Add the `bootRun.environment` and `test.environment` methods
     to the `build.gradle` file:
@@ -95,9 +97,9 @@ to make this easier.
         test.environment([
                 "WELCOME_MESSAGE": "Hello from test",
         ])
-    ``` 
+    ```
 
-    If you see a pop-up window in the `Editor` 
+    If you see a pop-up window in the `Editor`
     asking if you want to synchronize
     the Java classpath/configuration, click `Always`.
 
@@ -140,7 +142,7 @@ to make this easier.
 # Wrap
 
 In this exercise, you used environment variables to set up
-configuration properties of an application. 
+configuration properties of an application.
 
 # Resources
 

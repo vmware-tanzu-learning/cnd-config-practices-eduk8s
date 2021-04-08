@@ -1,20 +1,19 @@
 
-This exercise walks you through on
-how to use ConfigMaps in Kubernetes to set
+This exercise walks you through
+how to use *ConfigMaps* in Kubernetes to set
 environment variables for your application.
 
 # Learning Outcomes
 
 After completing the lab, you will be able to:
 
-- Explain how to configure an application running on 
-  Kubernetes using a ConfigMap
-- Describe how to view Pod logs
+-   Explain how to configure an application running on
+    Kubernetes using a *ConfigMap*
 
-## Run in a container
+## Run in a container locally
 
 Now you are going to build a new
-container image.
+container image and run it on your developer workstation using *Docker*.
 
 1.  Use the `bootBuildImage` task to build a new image.
     Specify the repository and the version while building the image.
@@ -33,7 +32,14 @@ container image.
     session: 1
     ```
 
-    Note that the exception occurred due to `Could not resolve placeholder 'welcome.message' in value "${welcome.message}`.
+    Note that the exception occurred due to
+    `Could not resolve placeholder 'welcome.message' in value "${welcome.message}`.
+
+    Notice that the Spring Boot application does not allow start up
+    without the `WELCOME_MESSAGE` environment variable.
+    It is required by the application to run.
+    It is a better practice to *fail fast* than to have the application
+    start in an indeterminate state.
 
 1.  To handle multiple environment variables more easily across Docker
     container instances, create a `dockerenv` file in the root of your
@@ -88,18 +94,6 @@ container image.
     ```terminal:clear-all
     ```
 
-1.  Apply Service and Ingress resources.
-
-    ```terminal:execute
-    command: kubectl apply -f service.yaml
-    session: 2
-    ```
-
-    ```terminal:execute
-    command: kubectl apply -f ingress.yaml
-    session: 2
-    ```
-
 1.  Before applying the change to the Deployment, run
     `kubectl get pods --watch`.
     This will show you a running status of the Pods as changes are
@@ -111,11 +105,11 @@ container image.
     ```
 
 1.  To apply your Deployment changes, run the same command you ran when
-    you first created the Deployment. 
+    you first created the Deployment.
     **Failure of the deployment is expected**
 
     ```terminal:execute
-    command: kubectl apply -f deployment.yaml
+    command: kubectl apply -f .
     session: 2
     ```
 
@@ -132,15 +126,16 @@ container image.
 
     This will show the last 100 lines of system out and system error
     from Pods with the label `app: pal-tracker`.
-    Right now you only have a single Pod, but when you scale to multiple
-    Pods this same command will fetch logs from all of them.
 
     Notice that the following exception is thrown by the application.
     (You might have to click the above action a couple of times.)
 
-    ```
+    ```no-highlight
     Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'welcome.message' in value "${welcome.message}"
     ```
+
+    This is the same failure of Spring Boot to start the application as
+    you saw when running locally.
 
 ## Configure the app using a ConfigMap
 
@@ -202,14 +197,14 @@ the container running your app.
     ```editor:insert-value-into-yaml
     file: ~/exercises/k8s/deployment.yaml
     path: spec.template.spec.containers[0]
-    value: 
+    value:
         env:
         - name: WELCOME_MESSAGE
           valueFrom:
             configMapKeyRef:
               name: pal-tracker
               key: welcome.message
-    ```    
+    ```
 
 1.  Apply the modified `deployment.yaml`.
 
@@ -240,19 +235,19 @@ properties of an application.
 Now there are some issues to consider with the way configuration
 properties are provided to the applications in this exercise:
 
--   The configuration data among application instances 
-    become more and more different as time goes on: this
-    is called "Configuration Drift".
+-   The configuration data among application instances
+    become more and more different as time goes on:
+    this is called "Configuration Drift".
 
--   You don't want to set configuration data by hand.
+-   You do not want to set configuration data by hand.
     If you need to change a configuration, you will want
     to make a change in source code-controlled manner,
     which will be picked by automated deployment tool.
 
 -   Some configuration data such as password need to be
-    protected.  This might require the usage of 
-    security-enabled configuration servers such as
-    Vault from HashiCorp or CredHub from Cloud Foundry.
+    protected.
+    This might require the usage of security-enabled configuration
+    servers such as *HashiCorp Vault* or *Cloud Foundry CredHub*.
 
 # Resources
 
