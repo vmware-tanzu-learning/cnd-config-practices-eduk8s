@@ -23,8 +23,16 @@ After completing the lab, you will be able to:
 
 ## Change ConfigMap
 
-1.  Change the value of `welcome.message` in the `configmap.yaml`
+1.  Change the value of `welcome.message` in the `configmap.yaml` 
+    manually from the editor
+
+    ```editor:select-matching-text
+    file: ~/exercises/k8s/configmap.yaml
+    text: "hello"
+    ```
    
+    or run the following command
+
     ```terminal:execute
     command: sed -i "s/hello/hello2/g" configmap.yaml
     session: 1
