@@ -7,26 +7,9 @@ environment variables.
 
 After completing the lab, you will be able to:
 
-- Summarize some of the ways to configure a Spring application
-- Use environment variables to externally configure an application running locally
-
-# 12 Factor Applications
-
-Take a minute to read through the [12 factors](https://12factor.net)
-guidelines on how to architect applications.
-In practice you will have to decide which ones to use and if it makes
-sense to adhere to all of them.
-
-In the prior labs, you covered the first two factors by setting up your
-codebase in GitHub and using Gradle to explicitly declare your
-dependencies.
-
-This lab will focus on the third factor: storing configuration in
-the environment.
-
-There are many options for how to externalize configuration for a cloud
-native application.
-Our first choice is to use environment variables.
+-   Summarize some of the ways to configure an application
+-   Use environment variables to externally configure an application
+    running locally
 
 # Get started
 
@@ -64,18 +47,11 @@ Spring Boot includes a mechanism to get configuration values.
     Review how `@Value` annotation is used to inject `welcome.message`
     property value through a constructor argument.
 
-    Take time to read about
-    [annotation-based configuration](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-annotation-config)
-    if you are new to Spring or if you need a refresher.
-    There is more [detailed documentation](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#expressions-beandef)
-    on using Spring expressions in bean definitions and annotations, if
-    you are interested.
-
 ## Verify it works
 
 1.  Run your app with `WELCOME_MESSAGE` environment variable, which
-    is set at the commandline. 
-    Wait until the application is successfully started. 
+    is set at the commandline.
+    Wait until the application is successfully started.
     (You should see `Tomcat started on port(s): 8080 ...`)
 
     ```terminal:execute
@@ -100,11 +76,12 @@ Spring Boot includes a mechanism to get configuration values.
 
 ## Manage local properties
 
-Running your application with environment variables in the command line
-every time is a pain.
+Running your application with environment variables at the command line
+every time is tedious.
+
 You can
 [leverage Gradle](https://cloudnative.tips/configuring-a-java-application-for-local-development-60e2c9794ca7)
-to make this easier.
+to make this easier when running locally.
 
 1.  Add the `bootRun.environment` and `test.environment` methods
     to the `build.gradle` file:
@@ -120,9 +97,9 @@ to make this easier.
         test.environment([
                 "WELCOME_MESSAGE": "Hello from test",
         ])
-    ``` 
+    ```
 
-    If you see a pop-up window in the `Editor` 
+    If you see a pop-up window in the `Editor`
     asking if you want to synchronize
     the Java classpath/configuration, click `Always`.
 
@@ -165,7 +142,7 @@ to make this easier.
 # Wrap
 
 In this exercise, you used environment variables to set up
-properties of an application. 
+configuration properties of an application.
 
 # Resources
 
