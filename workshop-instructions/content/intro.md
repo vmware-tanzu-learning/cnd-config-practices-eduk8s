@@ -1,15 +1,22 @@
 # Configuring a Cloud Native app
 
-Cloud native applications have an additional set of requirements
-in configuring an application.
+Externalizing configuration properties out of code artifact
+is nothing new and has been used by application developers
+for many years even before the emergence of the cloud 
+in order to abstract away diffrent deployment
+requirements.
 
-[Add more wording here]
+Cloud native platform impose additional configuration 
+challenges to the application developers, however,
+due to its highly dynamic nature in which application instances
+come and go constantly.
 
 ## Learning outcomes
 
 After completing the workshop, you will be able to:
 
 -   Explain configuration requirements of Cloud Native applications
+  
 -   Explain configuration options available to Cloud Native applications
 
 ## Introduction

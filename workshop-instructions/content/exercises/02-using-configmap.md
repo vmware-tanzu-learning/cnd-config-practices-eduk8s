@@ -7,7 +7,8 @@ environment variables for your application.
 
 After completing the lab, you will be able to:
 
-- Explain how to configure an application running on Kubernetes using a ConfigMap
+- Explain how to configure an application running on 
+  Kubernetes using a ConfigMap
 - Describe how to view Pod logs
 
 ## Run in a container
