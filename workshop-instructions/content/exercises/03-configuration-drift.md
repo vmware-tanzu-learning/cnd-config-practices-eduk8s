@@ -6,8 +6,10 @@ can occur and how to avoid it.
 
 After completing the lab, you will be able to:
 
--   Describe an example scenario of *Configuratiodn Drift*
--   Describe a scheme of how to avoid *Configuratiodn Drift*
+-   Describe an example scenario of *Configuration Drift* that can occur
+    on a modern orchestration platform.
+-   Describe a method avoiding *Configuration Drift* while running on a
+    modern orchestration platform.
 
 ## Get started
 
@@ -22,22 +24,24 @@ After completing the lab, you will be able to:
     ```terminal:clear-all
     ```
 
-## Change ConfigMap
+## Change the configuration
 
 Here you are going to change a value of a configuration
-property in the ConfigMap.
-You will see if this value will be picked up by all
-application instances (existing and new instances through
-scaling up) or not.
+property in the `ConfigMap`.
 
-1.  Change the value of `welcome.message` in the `configmap.yaml` 
-    manually from the editor
+You will see if the updated value will be applied to running
+application instances,
+both existing prior to the configuration change as well as started
+after the configuration change is applied.
+
+1.  Change the value of `welcome.message` in the `configmap.yaml`
+    manually from the editor:
 
     ```editor:select-matching-text
     file: ~/exercises/k8s/configmap.yaml
     text: "hello"
     ```
-   
+
     or run the following command
 
     ```terminal:execute
@@ -52,7 +56,7 @@ scaling up) or not.
     session: 1
     ```
 
-1.  Access the application and observe that the response is 
+1.  Access the application and observe that the response is
     still "hello from kubernetes" not "hello2 from kubernetes".
 
     ```terminal:execute
@@ -67,23 +71,58 @@ scaling up) or not.
     session: 1
     ```
 
-1.  Access the application and observe that the response is 
-    still "hello from kubernetes" not "hello2 from kubernetes".
+    Do you see any changes to the `pal-tracker` deployment?
+
+    Note that the `ConfigMap` changes are separate from the deployment,
+    and that you might consider Kubernetes playing the role of a
+    *Backing Service* to provide a source of configuration to your
+    deployment during its processes start up time.
+
+1.  Access the application and observe that the response:
 
     ```terminal:execute
     command: curl -i http://pal-tracker.${SESSION_NAMESPACE}.${INGRESS_DOMAIN}
     session: 2
     ```
 
-## Scale up the number of instances
+   *Is it still "hello from kubernetes" not "hello2 from kubernetes"?*
 
-An app operator uses horizontal scaling to scale up or down
-the number of application instances in order to accomodate
-changing number of client requests.
+At this point you have not restarted the existing `pal-tracker`
+deployment.
 
-Now here we are going to scale up the `pal-tracker` instances
-from 1 to 3 and see if all instances (existing and newly created instances) will
-pick up the new configuration value in the ConfigMap.
+The `pal-tracker` application deployment consists of your `pal-tracker`
+Spring Boot app running in a process inside of your deployment's
+container.
+It sources the `WELCOME_MESSAGE` environment variable from the container
+profile during the deployment (and associated container) startup.
+Neither the container profile, nor the Spring Boot application, have
+any idea about the new environment variable until the Spring Boot
+application process is disposed,
+and restarted with an update container profile with the new environment
+variable value.
+
+## Add instances
+
+In Cloud Native applications, if the load on an application deployment
+grows,
+an app operator will add capacity to that deployment by adding process
+instances.
+If the load on an application deployment shrinks,
+an app operator will remove capacity from the deployment by removing
+process instances.
+
+This is called *Scaling*,
+and we will cover that at depth in a later track.
+
+One problem with scaling up (adding process instances) is that if the
+`ConfigMap` has changed,
+the current running instances will not have that change applied,
+but any new instances starting up after the configuration change will.
+
+We are going to "scale up" the `pal-tracker` instances from 1 to 3 to
+verify that behavior.
+Note that the feature in Kubernetes to specify the number of containers
+and associated process instances is call *Replica*:
 
 1.  Scale up the instances to 3
 
@@ -99,12 +138,12 @@ pick up the new configuration value in the ConfigMap.
     session: 1
     ```
 
-1.  Access the application multiple times and observe 
+1.  Access the application multiple times and observe
     that the ratio of
     responses between "hello from kubernetes" not "hello2 from kubernetes" is roughly 1:2.
 
     ```terminal:execute
-    command: curl -i http://pal-tracker.${SESSION_NAMESPACE}.${INGRESS_DOMAIN}
+    command: for i in $(seq 9); do curl -i http://pal-tracker.${SESSION_NAMESPACE}.${INGRESS_DOMAIN} && sleep 1; done
     session: 2
     ```
 
@@ -117,7 +156,7 @@ pick up the new configuration value in the ConfigMap.
 
 You are going to restart all application instances and
 see if they all pick up the new configuration value.
-    
+
 1.  Rollout the application
 
     ```terminal:execute
@@ -125,7 +164,7 @@ see if they all pick up the new configuration value.
     session: 1
     ```
 
-1.  Access the application multiple times and observe 
+1.  Access the application multiple times and observe
     that all responses include
     "hello2 from kubernetes".
 
@@ -134,18 +173,24 @@ see if they all pick up the new configuration value.
     session: 2
     ```
 
+
 # Wrap
 
-In this exercise, you did observe an example scenario 
+In this exercise, you did observe an example scenario
 of *Configuration Drift*,
 in which application instances are becoming different
 as time goes on.
 This problem could be even more exacerbated through
-undeciplined usage of auto-scaling.
+usage of auto-scaling that is not coordinated with your
+configuration updates.
 
-One way to avoid *Configuration Drift* is to restart all
-application instances on a periodic basis through 
-automation.
+One way to avoid *Configuration Drift* is to restart an *Application Deployment*,
+where all instances are disposed and re-started as part of applying a new configuration.
+
+This may cause another problem in that your application deployment may
+experience a brief downtime.
+
+We will explore a solution to that problem in a subsequent track.
 
 # Resources
 
