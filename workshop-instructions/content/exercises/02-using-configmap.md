@@ -68,8 +68,7 @@ container image and run it on your developer workstation using *Docker*.
 
 1.  Terminate your web app:
 
-    ```terminal:execute
-    command: <ctrl+c>
+    ```terminal:interrupt
     session: 1
     ```
 

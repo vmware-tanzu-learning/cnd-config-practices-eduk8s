@@ -69,8 +69,7 @@ Spring Boot includes a mechanism to get configuration values.
 
 1.  Terminate your web app:
 
-    ```terminal:execute
-    command: <ctrl+c>
+    ```terminal:interrupt
     session: 1
     ```
 
@@ -126,8 +125,7 @@ to make this easier when running locally.
 
 1.  Terminate your web app:
 
-    ```terminal:execute
-    command: <ctrl+c>
+    ```terminal:interrupt
     session: 1
     ```
 
