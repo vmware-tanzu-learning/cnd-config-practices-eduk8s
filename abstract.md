@@ -24,32 +24,15 @@ new to cloud native concepts who wish to learn the basics of
 handling environmental configuration separately from a web application
 codebase using modern orchestration platform tools.
 
-In this workshop you will be presented:
+After completing the workshop, you will be able to:
 
--   The essence of *Externalizing your environmental configuration*.
+-   Explain configuration requirements of Cloud Native applications
 
--   Categories of tools by which you can external environmental
-    configuration.
+-   Explain configuration options available to Cloud Native applications
 
--   The concept of *Configuration Drift*,
-    its consequences,
-    and how you might avoid it.
-
-You will also:
-
--   Externalize configuration of a web application using environment
-    variables.
-
--   Use a orchestration platform feature to separate your external
-    configuration from your application codebase.
-
--   Demonstrate deployment of a *Release* including the container image
-    and environment configuration.
-
--   Demonstrate a scenario where configuration drift can occur.
-
--   Demonstrate how to avoid configuration drift with an orchestration
-    platform deployment feature.
+-   Explain the concept of *Configuration Drift*,
+    why it can be a problem,
+    and how to avoid it.
 
 This workshop is the second in a series of workshops that explore
 cloud-native development and application operations practices.
