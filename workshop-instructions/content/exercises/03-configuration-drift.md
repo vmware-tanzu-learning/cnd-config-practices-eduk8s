@@ -133,11 +133,11 @@ and associated process instances is call *Replica*:
 
 1.  Verify the number of instances is now 3
 
-   ```terminal:execute
+    ```terminal:execute
     command: kubectl get all
     session: 1
     ```
-
+    
 1.  Access the application multiple times and observe
     that the ratio of
     responses between "hello from kubernetes" not "hello2 from kubernetes" is roughly 1:2.
