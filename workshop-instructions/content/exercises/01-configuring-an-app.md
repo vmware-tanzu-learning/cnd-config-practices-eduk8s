@@ -17,7 +17,7 @@ After completing the lab, you will be able to:
     your terminal windows:
 
     ```terminal:execute-all
-    command: cd ~/exercises/pal-tracker
+    command: cd ~/exercises/pal-tracker && clear
     ```
 
 # Environment Variables
