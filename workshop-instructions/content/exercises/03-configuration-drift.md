@@ -115,9 +115,8 @@ pick up the new configuration value in the ConfigMap.
 
 ## Restart all instances
 
-One way to avoid *Configuration Drift* is to restart all
-application instances on a periodic basis through 
-automation.
+You are going to restart all application instances and
+see if they all pick up the new configuration value.
     
 1.  Rollout the application
 
@@ -141,6 +140,12 @@ In this exercise, you did observe an example scenario
 of *Configuration Drift*,
 in which application instances are becoming different
 as time goes on.
+This problem could be even more exacerbated through
+undeciplined usage of auto-scaling.
+
+One way to avoid *Configuration Drift* is to restart all
+application instances on a periodic basis through 
+automation.
 
 # Resources
 
