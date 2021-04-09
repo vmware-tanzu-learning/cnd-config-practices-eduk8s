@@ -18,10 +18,7 @@ After completing the lab, you will be able to:
     and clear both:
 
     ```terminal:execute-all
-    command: cd ~/exercises/k8s
-    ```
-
-    ```terminal:clear-all
+    command: cd ~/exercises/k8s && clear
     ```
 
 ## Change the configuration
@@ -137,7 +134,7 @@ and associated process instances is call *Replica*:
     command: kubectl get all
     session: 1
     ```
-    
+
 1.  Access the application multiple times and observe
     that the ratio of
     responses between "hello from kubernetes" not "hello2 from kubernetes" is roughly 1:2.

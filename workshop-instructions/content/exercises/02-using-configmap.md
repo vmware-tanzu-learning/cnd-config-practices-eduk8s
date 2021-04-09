@@ -10,6 +10,16 @@ After completing the lab, you will be able to:
 -   Explain how to configure an application running on
     Kubernetes using a *ConfigMap*
 
+## Get started
+
+1.  Make sure you are in your `~/exercises/pal-tracker` directory now in
+    both of your terminal windows,
+    and clear both:
+
+    ```terminal:execute-all
+    command: cd ~/exercises/pal-tracker && clear
+    ```
+
 ## Run in a container locally
 
 Now you are going to build a new
@@ -87,10 +97,7 @@ container image and run it on your developer workstation using *Docker*.
     and clear both:
 
     ```terminal:execute-all
-    command: cd ~/exercises/k8s
-    ```
-
-    ```terminal:clear-all
+    command: cd ~/exercises/k8s && clear
     ```
 
 1.  Before applying the change to the Deployment, run
