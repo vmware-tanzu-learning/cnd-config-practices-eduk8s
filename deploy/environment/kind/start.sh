@@ -10,6 +10,9 @@ kind delete cluster --name "${CLUSTER_NAME}" > /dev/null 2>&1 || true
 echo "===== Creating cluster"
 kind create cluster --name "${CLUSTER_NAME}" --config ${DIR}/kind-config.yaml
 
+echo "===== Loading workshop image into cluster"
+kind load docker-image --name "${CLUSTER_NAME}" "${CLUSTER_NAME}"
+
 echo "===== Installing Ingress Controller"
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 sleep 20 # TODO - find a better way to determine when the resources are defined so wait command doesn't fail

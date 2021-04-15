@@ -65,14 +65,8 @@ spec:
           spec:
             containers:
             - name: nginx
-              image: nginxinc/nginx-unprivileged:1.19-alpine
-              volumeMounts:
-              - mountPath: /usr/share/nginx/html
-                name: data
-            volumes:
-            - name: data
-              persistentVolumeClaim:
-                claimName: tarball-data
+              image: cnd-config-practices
+              imagePullPolicy: IfNotPresent
     - apiVersion: v1
       kind: Service
       metadata:

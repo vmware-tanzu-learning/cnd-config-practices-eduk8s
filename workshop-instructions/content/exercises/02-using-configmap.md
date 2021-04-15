@@ -58,7 +58,7 @@ container image and run it on your developer workstation using *Docker*.
     ```editor:append-lines-to-file
     file: ~/exercises/pal-tracker/dockerenv
     text: |
-        WELCOME_MESSAGE=hello from dockerenv file
+        WELCOME_MESSAGE=hello from dockerenv file\n
     ```
 
 1.  Tell `docker run` to read the environment variables from the file:
@@ -165,7 +165,7 @@ the container running your app.
             labels:
                 app: pal-tracker
         data:
-            welcome.message: "hello from kubernetes"
+            welcome.message: "hello from kubernetes\n"
     ```
 
     The `data` section above sets an environment variable named
@@ -259,4 +259,3 @@ properties are provided to the applications in this exercise:
 
 - [ConfigMap Overview](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/)
 - [ConfigMap API Documentation](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.19/#configmap-v1-core)
-
