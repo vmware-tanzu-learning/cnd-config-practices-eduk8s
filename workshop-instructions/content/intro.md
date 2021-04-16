@@ -23,16 +23,15 @@ After completing the workshop, you will be able to:
 
 ## Introduction
 
-Review the
-[Configuration](https://docs.google.com/presentation/d/15Uzx3TncuujqoLj9xDx1XhhXQJMdT9KGhYxCFQgSGUI/edit#slide=id.g7ea4a9dfdf_0_1813)
-slides or the accompanying *Configuration* lecture.
+Review the following slides and/or associated lectures:
 
-## Disclaimer
+-   Configuration Dependencies Introduction - Lecture #10 ([Slides](https://docs.google.com/presentation/d/1VyNcZ_UmkEVeVrUALAkXTKYRuZEMwFepQdBct7j-Urk))
 
-**It is beyond the scope of this workshop to teach you Java, Spring,**
-**Spring Boot, Kubernetes or product specifics in this workshop.**
+-   Configuration Dependencies - Lecture #10a ([Slides](https://docs.google.com/presentation/d/17mkMH5tD-xX4CZ41iDrYFggiTuM_CIEnnjYWR3Kg8MA))
 
-But you will be supplied with some basic clues about how the they
-relate to the *concepts* discussed in the workshop,
-and some separate references if you want to dig into the implementation
-details a bit more.
+-   Platform Behaviors and Contraints - Lecture #11 ([Slides](https://docs.google.com/presentation/d/1skgQGPm2sBQM59bVMYEhh2seMpQd8HNekluYxJoRyMI))
+
+-   Applications, Deployments, Constraints - Lecture #12 ([Slides](https://docs.google.com/presentation/d/1ihTQrSc5Jpv01SOD18C9TAjknha3sVabGr2zZ-k0PMg))
+
+It is important to understand the context and dimensions of change in
+a modern cloud native application and its deployment.
