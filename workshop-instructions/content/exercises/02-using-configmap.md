@@ -12,6 +12,10 @@ After completing the lab, you will be able to:
 
 ## Get started
 
+1.  Review the following lecture materials:
+
+    - Environment Variables and Backing Services #14 ([Slides](https://docs.google.com/presentation/d/1V6GT1FHzCVe4W0-7UASC7F84WghlK77M7PnHBBOBRC0))
+
 1.  Make sure you are in your `~/exercises/pal-tracker` directory now in
     both of your terminal windows,
     and clear both:
