@@ -7,8 +7,9 @@ environment variables for your application.
 
 After completing the lab, you will be able to:
 
--   Explain how to configure an application running on
-    Kubernetes using a *ConfigMap*
+-   Demonstrate use of a modern container orchestration platform's
+    features for configuring an application deployment's environment
+    variables.
 
 ## Get started
 

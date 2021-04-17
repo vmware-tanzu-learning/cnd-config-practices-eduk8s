@@ -9,4 +9,6 @@ modules:
     name: Using ConfigMap
   exercises/03-configuration-drift:
     name: Avoiding Configuration Drift
+  wrap:
+    name: Wrap Up
     exit_sign: Finish Workshop

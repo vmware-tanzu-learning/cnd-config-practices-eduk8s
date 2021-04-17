@@ -7,3 +7,4 @@ modules:
   - exercises/01-configuring-an-app
   - exercises/02-using-configmap
   - exercises/03-configuration-drift
+  - wrap
