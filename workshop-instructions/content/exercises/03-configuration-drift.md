@@ -1,6 +1,6 @@
 
 This exercise walks you through how *Configuration Drift*
-can occur and how to avoid it.
+can occur when scaling and how to avoid it.
 
 # Learning Outcomes
 
@@ -8,8 +8,8 @@ After completing the lab, you will be able to:
 
 -   Describe an example scenario of *Configuration Drift* that can occur
     on a modern orchestration platform.
--   Describe a method avoiding *Configuration Drift* while running on a
-    modern orchestration platform.
+-   Demonstrate a method to help avoid *Configuration Drift* while
+    running on a modern container orchestration platform.
 
 ## Get started
 

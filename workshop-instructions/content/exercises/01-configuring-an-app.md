@@ -8,7 +8,7 @@ environment variables.
 After completing the lab, you will be able to:
 
 -   Summarize some of the ways to configure an application
--   Use environment variables to externally configure an application
+-   Use environment variables to configure an application's environment
     running locally
 
 # Get started

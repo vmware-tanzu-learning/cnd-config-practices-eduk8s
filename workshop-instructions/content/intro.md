@@ -1,13 +1,15 @@
-Externalizing configuration properties out of code artifact
-is nothing new and has been used by application developers
-for many years even before the emergence of the cloud
-in order to abstract away diffrent deployment
-requirements.
+This is a workshop for developers and application operators
+new to cloud native concepts who wish to learn the basics of
+handling environmental configuration separately from a web application
+codebase using modern orchestration platform tools.
 
-Cloud native platform impose additional configuration
-challenges to the application developers, however,
-due to its highly dynamic nature in which application instances
-come and go constantly.
+Modern orchestration platforms and Cloud Native applications are highly
+dynamic, where application deployment processes come and go frequently.
+This imposes additional configuration considerations and challenges to
+the application developers and application operators.
+
+This workshop and the accompanying lectures will give you a better
+understanding of how to configure your applications.
 
 ## Learning outcomes
 
