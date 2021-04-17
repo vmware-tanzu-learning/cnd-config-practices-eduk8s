@@ -151,6 +151,12 @@ and associated process instances is call *Replica*:
     This indicates that the newly created instances picked
     up the new `welcome.message` configuration value while
     the existing one still uses the old configuration value.
+
+    While the difference is only one particular change,
+    you can see that an application operator could make multiple
+    changes that could result in a cascade of containers that have
+    significantly different configurations.
+
     This is an example of *Configuration Drift*.
 
 ## Restart all instances
@@ -173,6 +179,16 @@ see if they all pick up the new configuration value.
     command: for i in $(seq 9); do curl -i http://pal-tracker.${SESSION_NAMESPACE}.${INGRESS_DOMAIN} && sleep 1; done
     session: 2
     ```
+
+    You might notices during the period of the rollout, the
+    configurations are still different.
+
+    But the outcome is that all of the containers and their Spring Boot
+    processes end up with the same state.
+
+    The rolling update strategy in Kubernetes provides a mechanism
+    for zero downtime transition between two different deployments that
+    we will explore at more depth in a later workshop.
 
 # Wrap
 

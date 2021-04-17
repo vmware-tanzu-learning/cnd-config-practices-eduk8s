@@ -8,5 +8,5 @@ modules:
   exercises/02-using-configmap:
     name: Using ConfigMap
   exercises/03-configuration-drift:
-    name: Handling Configuration Drift
+    name: Avoiding Configuration Drift
     exit_sign: Finish Workshop

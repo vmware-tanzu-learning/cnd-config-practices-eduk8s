@@ -133,14 +133,6 @@ to make this easier when running locally.
     session: 1
     ```
 
-1.  Make sure all your tests pass before moving on by running
-    the Gradle `build` task.
-
-    ```terminal:execute
-    command: ./gradlew clean build
-    session: 1
-    ```
-
 # Wrap
 
 In this exercise, you used environment variables to set up

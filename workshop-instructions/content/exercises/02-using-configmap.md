@@ -62,7 +62,7 @@ container image and run it on your developer workstation using *Docker*.
     ```editor:append-lines-to-file
     file: ~/exercises/pal-tracker/dockerenv
     text: |
-        WELCOME_MESSAGE=hello from dockerenv file\n
+        WELCOME_MESSAGE=hello from dockerenv file
     ```
 
 1.  Tell `docker run` to read the environment variables from the file:
@@ -225,6 +225,12 @@ the container running your app.
 
 1.  View the output of the `kubectl get pods --watch`.
     You will see the previously failing Pod is now in `Running` status.
+
+1.  Terminate the watch command:
+
+    ```terminal:interrupt
+    session: 1
+    ```
 
 # Run a smoke test
 
