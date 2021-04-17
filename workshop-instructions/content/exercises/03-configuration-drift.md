@@ -15,7 +15,7 @@ After completing the lab, you will be able to:
 
 1.  Review the following lecture materials:
 
-    - Configuration synchronization #15 ([Slides](https://docs.google.com/presentation/d/1R_Vi2VOKhXwomhegqWmNjKnHU-yDPdnW-vGs-FJ_3-Y))
+    - Configuration synchronization - Lecture #15 ([Slides](https://docs.google.com/presentation/d/1R_Vi2VOKhXwomhegqWmNjKnHU-yDPdnW-vGs-FJ_3-Y))
 
 1.  Make sure you are in your `~/exercises/k8s` directory now in
     both of your terminal windows,

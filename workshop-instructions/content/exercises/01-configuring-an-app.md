@@ -15,7 +15,7 @@ After completing the lab, you will be able to:
 
 1.  Review the following lecture materials:
 
-    - Environment Configuration #13 ([Slides](https://docs.google.com/presentation/d/1JxtHb8i9R1_wndlc_zKsyZooKkgpel2gj8U7Z7SoBs0))
+    - Environment Configuration - Lecture #13 ([Slides](https://docs.google.com/presentation/d/1JxtHb8i9R1_wndlc_zKsyZooKkgpel2gj8U7Z7SoBs0))
 
 1.  Set current directory to the `~/exercises/pal-tracker` now in both of
     your terminal windows:
