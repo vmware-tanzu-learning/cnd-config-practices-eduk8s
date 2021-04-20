@@ -32,7 +32,7 @@ spec:
         enabled: true
     dashboards:
     - name: Lecture
-      url: https://vimeo.com/showcase/8261088/embed
+      url: https://vimeo.com/showcase/8381366/embed
   environment:
     objects:
     - apiVersion: v1
