@@ -135,16 +135,20 @@ and associated process instances is call *Replica*:
 1.  Verify the number of instances is now 3
 
     ```terminal:execute
-    command: kubectl get all
+    command: watch kubectl get all
     session: 1
     ```
 
-1.  Access the application multiple times and observe
+    Wait until all the replicas (pods) are in a `Running` state before
+    proceeding.
+
+1.  After all the replicas are running,
+    access the application multiple times and observe
     that the ratio of
     responses between "hello from kubernetes" not "hello2 from kubernetes" is roughly 1:2.
 
     ```terminal:execute
-    command: for i in $(seq 9); do curl -i http://pal-tracker.${SESSION_NAMESPACE}.${INGRESS_DOMAIN} && sleep 1; done
+    command: for i in $(seq 30); do curl -i http://pal-tracker.${SESSION_NAMESPACE}.${INGRESS_DOMAIN} && sleep 1; done
     session: 2
     ```
 
@@ -159,29 +163,47 @@ and associated process instances is call *Replica*:
 
     This is an example of *Configuration Drift*.
 
+1.  Terminate the watch command in terminal 1:
+
+    ```terminal:interrupt
+    session: 1
+    ```
+
 ## Restart all instances
 
 You are going to restart all application instances and
 see if they all pick up the new configuration value.
 
+1.  Put a watch on your deployment:
+
+    ```terminal:execute
+    command: watch kubectl get all
+    session: 1
+    ```
+
 1.  Rollout the application
 
     ```terminal:execute
     command: kubectl rollout restart deployment.apps/pal-tracker
-    session: 1
-    ```
-
-1.  Access the application multiple times and observe
-    that all responses include
-    "hello2 from kubernetes".
-
-    ```terminal:execute
-    command: for i in $(seq 9); do curl -i http://pal-tracker.${SESSION_NAMESPACE}.${INGRESS_DOMAIN} && sleep 1; done
     session: 2
     ```
 
-    You might notices during the period of the rollout, the
-    configurations are still different.
+    Watch the status of your rollout in terminal 1.
+    You will see the existing pods terminated and restarted
+    with the new deployment.
+
+1.  After all three pods are restarted,
+    access the application multiple times and observe that all responses
+    include "hello2 from kubernetes".
+
+    ```terminal:execute
+    command: for i in $(seq 30); do curl -i http://pal-tracker.${SESSION_NAMESPACE}.${INGRESS_DOMAIN} && sleep 1; done
+    session: 2
+    ```
+
+    You might notice during the period of the rollout, the
+    configuration is still different between the pods comprising the
+    deployment.
 
     But the outcome is that all of the containers and their Spring Boot
     processes end up with the same state.

@@ -106,12 +106,12 @@ container image and run it on your developer workstation using *Docker*.
     ```
 
 1.  Before applying the change to the Deployment, run
-    `kubectl get pods --watch`.
+    `watch kubectl get pods`.
     This will show you a running status of the Pods as changes are
     applied.
 
     ```terminal:execute
-    command: kubectl get pods --watch
+    command: watch kubectl get pods
     session: 1
     ```
 
@@ -124,11 +124,12 @@ container image and run it on your developer workstation using *Docker*.
     session: 2
     ```
 
-    View the output of the `kubectl get pods --watch`.
+    View the output of the `watch kubectl get pods`.
     The new Pod will start crashing and you will see it cycle its
     STATUS among "Running", "Error", and "CrashLoopBackOff".
 
-1.  View the logs of the Pod by running:
+1.  After you see the "CrashLoopBackOff",
+    view the logs of the Pod by running:
 
     ```terminal:execute
     command: kubectl logs -lapp=pal-tracker --tail=100
@@ -224,10 +225,11 @@ the container running your app.
     session: 2
     ```
 
-1.  View the output of the `kubectl get pods --watch`.
+1.  View the output of the `watch kubectl get pods`.
     You will see the previously failing Pod is now in `Running` status.
 
-1.  Terminate the watch command:
+1.  After seeing the failed Pod return to the `Running` status,
+    terminate the watch command:
 
     ```terminal:interrupt
     session: 1
@@ -243,6 +245,8 @@ session: 2
 ```
 
 You should see 'hello from kubernetes' message in the output.
+If you see a `502` `Bad Gateway` exception,
+what 10 seconds and repeat the `curl` command.
 
 # Wrap
 
