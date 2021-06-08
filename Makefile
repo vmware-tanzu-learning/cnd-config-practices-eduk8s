@@ -1,30 +1,42 @@
-NAME                  = cnd-config-practices
-IMAGE_SOURCE		  = https://github.com/platform-acceleration-lab/cnd-config-practices-eduk8s
-CONTAINER_REGISTRY    = ghcr.io/platform-acceleration-lab
-CONTAINER_REPOSITORY  = ${NAME}
-version               = latest
+#!make
+include Makefile.env
 
 # Put it first so that "make" without argument is like "make help".
-run: build kind-start educates-deploy
+run: kind-start educates-deploy reload
 
-reload: build educates-deploy educates-refresh
+reload: build workshop-deploy workshop-deploy workshop-refresh
 
-refresh: build educates-refresh
+refresh: build workshop-refresh
 
-.PHONY: build kind-start kind-stop educates-deploy educates-refresh release deploy get-reporeg get-name
+start: kind-start workshop-deploy workshop-refresh
+
+stop: kind-stop
+
+delete: kind-delete
+
+clean: kind-clean
+
+.PHONY: build kind-start kind-delete kind-clean kind-stop educates-deploy workshop-deploy workshop-refresh release delete start deploy stop clean get-reporeg get-name
 
 kind-start:
-	deploy/environment/kind/start.sh ${NAME}
+	deploy/environment/kind/deploy.sh start ${NAME}
 
 kind-stop:
-	deploy/environment/kind/stop.sh ${NAME}
+	deploy/environment/kind/deploy.sh stop
+
+kind-delete:
+	deploy/environment/kind/deploy.sh delete
+
+kind-clean:
+	deploy/environment/kind/deploy.sh clean
 
 educates-deploy:
 	deploy/platform/educates/deploy.sh installEducates ${NAME}
-	deploy/platform/educates/deploy.sh loadWorkshop ${NAME}
-	deploy/platform/educates/deploy.sh loadContent ${NAME}
 
-educates-refresh:
+workshop-deploy:
+	deploy/platform/educates/deploy.sh loadWorkshop ${NAME} overlays/kind
+
+workshop-refresh:
 	deploy/platform/educates/deploy.sh loadContent ${NAME}
 
 build:

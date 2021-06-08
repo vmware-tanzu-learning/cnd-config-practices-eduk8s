@@ -1,5 +1,10 @@
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
+containerdConfigPatches:
+- |-
+  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:5000"]
+    endpoint = ["http://kind-registry:5000"]
+  #__EXTRA_REGISTRIES__
 nodes:
 - role: control-plane
   kubeadmConfigPatches:
@@ -8,6 +13,13 @@ nodes:
     nodeRegistration:
       kubeletExtraArgs:
         node-labels: "ingress-ready=true"
+  - |
+    kind: ClusterConfiguration
+    metadata:
+      name: config
+    apiServer:
+      extraArgs:
+        enable-admission-plugins: PodSecurityPolicy        
   extraPortMappings:
   - containerPort: 80
     hostPort: 80

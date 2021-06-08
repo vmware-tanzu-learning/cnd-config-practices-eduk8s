@@ -1,3 +1,4 @@
+# See https://docs.edukates.io/en/latest/runtime-environment/workshop-definition.html
 apiVersion: training.eduk8s.io/v1alpha2
 kind: Workshop
 metadata:
@@ -10,7 +11,9 @@ spec:
   duration: 240m
   url: https://github.com/platform-acceleration-lab/cnd-config-practices-eduk8s
   content:
-    image: jdk11-environment:*
+    # Use the default image, one of the pre-existing ones, or you can build your own
+    # https://docs.edukates.io/en/develop/runtime-environment/workshop-definition.html#container-image-for-the-workshop
+    image: quay.io/eduk8s/jdk11-environment:master
     files: http://files.$(workshop_namespace).svc.cluster.local/workshop.tar.gz
   session:
     namespaces:
@@ -32,20 +35,9 @@ spec:
         enabled: true
     dashboards:
     - name: Lecture
-      url: https://vimeo.com/showcase/8381366/embed
+      url: https://vimeo.com/showcase/8261088/embed
   environment:
     objects:
-    - apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: tarball-data
-        namespace: $(workshop_namespace)
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 500Mi
     - apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -66,7 +58,6 @@ spec:
             containers:
             - name: nginx
               image: cnd-config-practices
-              imagePullPolicy: IfNotPresent
     - apiVersion: v1
       kind: Service
       metadata:

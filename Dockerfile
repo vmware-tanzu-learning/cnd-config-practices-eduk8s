@@ -10,4 +10,4 @@ ARG   IMAGE_SOURCE
 LABEL org.opencontainers.image.source $IMAGE_SOURCE
 WORKDIR /usr/share/nginx/html
 COPY --from=0 /build /usr/share/nginx/html
-COPY ./deploy/platform/educates/workshop-deploy.yaml /home/eduk8s/resources/workshop.yaml
+COPY ./deploy/platform/educates/base/workshop-deploy.yaml /home/eduk8s/resources/workshop.yaml
