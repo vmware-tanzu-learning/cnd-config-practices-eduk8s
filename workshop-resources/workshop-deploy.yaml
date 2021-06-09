@@ -4,22 +4,18 @@ kind: Workshop
 metadata:
   name: cnd-config-practices
 spec:
-  title: Deploy a Cloud Native App on a Modern Orchestrated Platform
-  description: Deploy a Cloud Native App on a Modern Orchestrated Platform
+  title: Configure a Cloud Native App on a Modern Orchestrated Platform
+  description: Configure a Cloud Native App on a Modern Orchestrated Platform
   vendor: eduk8s.io
   difficulty: beginner
-  duration: 240m
-  url: https://github.com/platform-acceleration-lab/cnd-config-practices-eduk8s
+  duration: 120m
+  url: https://github.com/platform-acceleration-lab/cnd-config-practices
   content:
     # Use the default image, one of the pre-existing ones, or you can build your own
     # https://docs.edukates.io/en/develop/runtime-environment/workshop-definition.html#container-image-for-the-workshop
-    image: quay.io/eduk8s/jdk11-environment:master
+    image: jdk11-environment:*
     files: http://files.$(workshop_namespace).svc.cluster.local/workshop.tar.gz
   session:
-    namespaces:
-      budget: large
-    resources:
-      memory: 2Gi
     applications:
       terminal:
         enabled: true
@@ -35,9 +31,22 @@ spec:
         enabled: true
     dashboards:
     - name: Lecture
-      url: https://vimeo.com/showcase/8261088/embed
+      url: https://vimeo.com/showcase/8381366/embed
   environment:
     objects:
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: files
+        namespace: $(workshop_namespace)
+      spec:
+        type: ClusterIP
+        ports:
+        - port: 80
+          protocol: TCP
+          targetPort: 8080
+        selector:
+          deployment: files
     - apiVersion: apps/v1
       kind: Deployment
       metadata:
@@ -56,18 +65,6 @@ spec:
               deployment: files
           spec:
             containers:
-            - name: nginx
+            - name: instructions
               image: cnd-config-practices
-    - apiVersion: v1
-      kind: Service
-      metadata:
-        name: files
-        namespace: $(workshop_namespace)
-      spec:
-        type: ClusterIP
-        ports:
-        - port: 80
-          protocol: TCP
-          targetPort: 8080
-        selector:
-          deployment: files
+              # NOTE: always make sure your workshop YAML ends with the files deployment

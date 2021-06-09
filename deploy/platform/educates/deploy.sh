@@ -19,7 +19,8 @@ installEducates() {
         EDUCATES_PORTAL_IMAGE=$(echo "${EDUCATES_YAML_ORIGINAL}" | grep eduk8s-portal: | awk '{print $2}' | sed s/'$(image_repository)'/"quay.io\\/eduk8s"/g)
         EDUCATES_WORKSHOP_BASE_IMAGE=$(echo "${EDUCATES_YAML_ORIGINAL}" | grep base-environment: | awk '{print $2}' | sed s/'$(image_repository)'/"quay.io\\/eduk8s"/g)
         # grab the first image reference in case people are specifying a workshop image. The goal here is to not cache everything
-        EDUCATES_WORKSHOP_IMAGE=$( grep -m 1 "image:" ${DIR}/base/workshop-deploy.yaml | awk '{print $2}' | sed s/'$(image_repository)'/"quay.io\\/eduk8s"/g)
+        EDUCATES_WORKSHOP_IMAGE=$( grep -m 1 "image:" ${DIR}/../../../workshop-resources/workshop-deploy.yaml | awk '{print $2}' | sed s/':*'/""/g)
+        EDUCATES_WORKSHOP_IMAGE=$(echo "${EDUCATES_YAML_ORIGINAL}" | grep ${EDUCATES_WORKSHOP_IMAGE} | awk '{print $2}' | sed s/'$(image_repository)'/"quay.io\\/eduk8s"/g)
 
         echo "===== Pulling Educates images to cache"
         docker pull "${EDUCATES_OPERATOR_IMAGE}"
@@ -34,7 +35,7 @@ installEducates() {
         docker push $(echo "${EDUCATES_PORTAL_IMAGE}" | sed s/"quay.io"/"localhost:5000"/g)
         docker tag "${EDUCATES_WORKSHOP_BASE_IMAGE}" $(echo "${EDUCATES_WORKSHOP_BASE_IMAGE}" | sed s/"quay.io"/"localhost:5000"/g)
         docker push $(echo "${EDUCATES_WORKSHOP_BASE_IMAGE}" | sed s/"quay.io"/"localhost:5000"/g)
-        docker tag "${EDUCATES_WORKSHOPIMAGE}" $(echo "${EDUCATES_WORKSHOPIMAGE}" | sed s/"quay.io"/"localhost:5000"/g)
+        docker tag "${EDUCATES_WORKSHOP_IMAGE}" $(echo "${EDUCATES_WORKSHOP_IMAGE}" | sed s/"quay.io"/"localhost:5000"/g)
         docker push $(echo "${EDUCATES_WORKSHOP_IMAGE}" | sed s/"quay.io"/"localhost:5000"/g)
 
         echo "===== Installing educates"
@@ -63,7 +64,11 @@ loadWorkshop() {
     docker push localhost:5000/${WORKSHOP_NAME}
 
     echo "===== Installing the workshop and training portal"
-    kubectl apply -k $DIR/$ENVIRONMENT
+    workshop_yaml_original="$(<${DIR}/../../../workshop-resources/workshop-deploy.yaml)"
+    workshop_yaml_resolved=$(echo "${workshop_yaml_original}" | sed "s/image: ${WORKSHOP_NAME}/image: localhost:5000\/${WORKSHOP_NAME}/g")
+    workshop_yaml_resolved+="$(<${DIR}/emptyDirOverride.yaml.snippet)"
+    echo "${workshop_yaml_resolved}" | kubectl apply -f -
+    kubectl apply -f ${DIR}/../../../workshop-resources/training-portal.yaml
 
     echo "===== Waiting for Trainging Portal to be Running"
     while true; do

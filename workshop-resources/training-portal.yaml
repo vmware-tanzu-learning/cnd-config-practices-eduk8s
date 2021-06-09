@@ -11,6 +11,6 @@ spec:
       workshop: true
   workshops:
   - name: cnd-config-practices
-    capacity: 5
+    capacity: 1
     expires: 180m
     orphaned: 5m
